@@ -1,8 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head><title>Jadwal Dokter</title></head>
-<body>
-    <h1>{{ $judul }}</h1>
-    <p>Halaman Jadwal Dokter Informasi Klinik.</p>
-</body>
-</html>
+@extends('layouts.app')
+@section('title', 'Jadwal')
+@section('content')
+    <h1>Jadwal Dokter</h1>
+    <p>Selamat datang di Sistem Informasi Klinik.</p>
+@endsection
