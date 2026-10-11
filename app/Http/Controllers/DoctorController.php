@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Doctor; // <-- 1. PASTIKAN YANG DI-IMPORT ADALAH MODEL DOCTOR
 
 class DoctorController extends Controller
 {
     public function index()
     {
-        $doctors = [
-            ['nama' => 'dr. Budi', 'spesialisasi' => 'Umum', 'status' => 'aktif'],
-            ['nama' => 'dr. Ratna', 'spesialisasi' => 'Gigi', 'status' => 'cuti'],
-            ['nama' => 'dr. Anton', 'spesialisasi' => 'Anak', 'status' => 'aktif'],
-            ['nama' => 'dr. Maya', 'spesialisasi' => 'Kandungan', 'status' => 'aktif'],
-            ['nama' => 'dr. Surya', 'spesialisasi' => 'Penyakit Dalam', 'status' => 'cuti'],
-        ];
-
+        // 2. PASTIKAN MENGAMBIL DATA MENGGUNAKAN Doctor::all()
+        $doctors = Doctor::all(); 
+        
         return view('dokter.index', compact('doctors'));
     }
 }

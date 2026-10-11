@@ -14,16 +14,16 @@
         </thead>
         <tbody>
             @forelse ($patients as $patient)
-            <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $patient['nama'] }}</td>
-                <td>{{ $patient['alamat'] }}</td>
-            </tr>
-            @empty
-            <tr>
-                <td colspan="3">Belum ada data pasien.</td>
-            </tr>
-            @endforelse
+        <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $patient->name }}</td>
+            <td>{{ $patient->address }}</td>
+        </tr>
+    @empty
+        <tr>
+            <td colspan="3">Belum ada data pasien.</td>
+        </tr>
+    @endforelse
         </tbody>
     </table>
 @endsection
