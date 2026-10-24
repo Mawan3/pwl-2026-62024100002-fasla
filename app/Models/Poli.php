@@ -15,4 +15,10 @@ class Poli extends Model
         'description',
         'is_active',
     ];
+
+    // Method relasi ke tabel doctors
+    public function doctors()
+    {
+        return $this->hasMany(Doctor::class);
+    }
 }

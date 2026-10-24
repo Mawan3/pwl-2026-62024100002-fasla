@@ -26,6 +26,7 @@
                             <th>Kode Dokter</th>
                             <th>Nama</th>
                             <th>Spesialisasi</th>
+                            <th>Poli</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -33,12 +34,22 @@
                     <tbody>
                         @forelse ($doctors as $doctor)
                         <tr>
+                            <!-- 1. Nomor Urut -->
                             <td>{{ $loop->iteration }}</td>
+                            
+                            <!-- 2. Kode Dokter -->
                             <td>{{ $doctor->doctor_code }}</td>
+                            
+                            <!-- 3. Nama -->
                             <td>{{ $doctor->name }}</td>
+                            
+                            <!-- 4. Spesialisasi -->
                             <td>{{ $doctor->specialization }}</td>
 
-                            <!-- 1. Kolom Status (Dipindah ke atas Aksi agar urutannya pas) -->
+                            <!-- 5. POSISI YANG BENAR UNTUK KOLOM POLI -->
+                            <td>{{ $doctor->poli?->name ?? 'Belum ada Poli' }}</td>
+
+                            <!-- 6. Status -->
                             <td class="align-middle">
                                 @if($doctor->is_active)
                                     <span class="badge bg-success">Aktif Melayani</span>
@@ -47,21 +58,19 @@
                                 @endif
                             </td>
 
-                            <!-- 2. Kolom Aksi -->
+                            <!-- 7. Aksi -->
                             <td class="align-middle">
                                 <a href="{{ route('dokter.edit', $doctor->id) }}" class="btn btn-sm btn-warning">Edit</a>
                                 
-                                <!-- Form hapus yang sudah diperbaiki (tidak ada </form> nyasar) -->
                                 <form action="{{ route('dokter.destroy', $doctor->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Hapus data Dokter ini?')">Hapus</button>
                                 </form>
                             </td>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center">Belum ada data dokter.</td>
                         </tr>
+                        @empty
+                            <tr><td colspan="7" class="text-center">Belum ada data Dokter.</td></tr>
                         @endforelse
                     </tbody>
                     <table class="table table-hover text-nowrap"></table>

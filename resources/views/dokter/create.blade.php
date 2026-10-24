@@ -39,7 +39,21 @@
                 @error('is_active') <div class="text-danger">{{ $message }}</div> @enderror
             </div>
 
+            <div class="mb-3">
+                <label>Poli</label>
+                <select name="poli_id" class="form-control">
+                    <option value="">-- Pilih Poli --</option>
+                    @foreach ($polis as $poli)
+                        <option value="{{ $poli->id }}" @selected(old('poli_id') == $poli->id)>
+                            {{ $poli->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('poli_id') <div class="text-danger">{{ $message }}</div> @enderror
+            </div>
+
             <button type="submit" class="btn btn-primary">Simpan</button>
+            <a href="{{ route('dokter.index') }}" class="btn btn-secondary">Batal</a>
         </form>
     </div>
 </div>

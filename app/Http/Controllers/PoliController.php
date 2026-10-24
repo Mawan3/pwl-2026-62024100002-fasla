@@ -58,4 +58,10 @@ class PoliController extends Controller
         $poli->delete();
         return redirect()->route('poli.index')->with('success', 'Data Poli berhasil dihapus.');
     }
+    public function show(Poli $poli)
+    {
+        // Memuat relasi daftar dokter yang bekerja di poli ini (Eager Loading)
+        $poli->load('doctors');
+        return view('poli.show', compact('poli'));
+    }
 }

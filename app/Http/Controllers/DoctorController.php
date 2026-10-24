@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Doctor; // <-- 1. PASTIKAN YANG DI-IMPORT ADALAH MODEL DOCTOR
+use App\Models\Doctor;
+use App\Models\Poli; // <-- Tambahkan ini
 use Illuminate\Validation\Rule;
 
 class DoctorController extends Controller
 {
     public function index()
     {
-        // 2. PASTIKAN MENGAMBIL DATA MENGGUNAKAN Doctor::all()
-        $doctors = Doctor::all(); 
+        // Menggunakan Eager Loading (with('poli')) untuk menghindari masalah N+1[cite: 39, 40]
+        $doctors = Doctor::with('poli')->get();
         return view('dokter.index', compact('doctors'));
     }
+
     public function create()
     {
-        return view('dokter.create');
+        // Mengambil semua poli aktif untuk dropdown
+        $polis = Poli::where('is_active', true)->orderBy('name')->get();
+        return view('dokter.create', compact('polis'));
     }
 
     public function store(Request $request)
@@ -26,7 +30,8 @@ class DoctorController extends Controller
             'name' => 'required|max:255',
             'specialization' => 'required|string',
             'phone' => 'nullable|max:20',
-            'is_active' => 'required|boolean', // 1 untuk Aktif, 0 untuk Cuti
+            'is_active' => 'required|boolean',
+            'poli_id' => 'required|exists:polis,id', // <-- Validasi exists[cite: 43]
         ]);
 
         Doctor::create($validated);
@@ -35,7 +40,9 @@ class DoctorController extends Controller
 
     public function edit(Doctor $dokter)
     {
-        return view('dokter.edit', compact('dokter'));
+        // Mengambil semua poli aktif untuk dropdown
+        $polis = Poli::where('is_active', true)->orderBy('name')->get();
+        return view('dokter.edit', compact('dokter', 'polis'));
     }
 
     public function update(Request $request, Doctor $dokter)
@@ -49,6 +56,7 @@ class DoctorController extends Controller
             'specialization' => 'required|string',
             'phone' => 'nullable|max:20',
             'is_active' => 'required|boolean',
+            'poli_id' => 'required|exists:polis,id', // <-- Validasi exists[cite: 43]
         ]);
 
         $dokter->update($validated);

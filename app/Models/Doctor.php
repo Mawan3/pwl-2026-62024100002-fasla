@@ -12,5 +12,13 @@ class Doctor extends Model
         'specialization',
         'phone',
         'is_active',
+        'poli_id',
     ];
+
+
+    // Tambahkan method relasi ini
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class);
+    }
 }
