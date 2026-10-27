@@ -8,16 +8,44 @@ use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $patients = Patient::all();
+        // 1. Memulai query builder bertahap
+        $query = Patient::query();
+
+        // 2. Search berdasarkan nama atau Nomor RM
+        if ($request->filled('search')) {
+            $search = $request->search;
+            // Gunakan closure agar kondisi OR dikelompokkan dengan benar
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('medical_record_number', 'like', "%{$search}%");
+            });
+        }
+
+        // 3. Filter berdasarkan Jenis Kelamin
+        if ($request->filled('gender')) {
+            $query->where('gender', $request->gender);
+        }
+
+        // 4. Sorting data dengan Whitelist (untuk keamanan)
+        $allowedSorts = ['name', 'created_at'];
+        $sort = in_array($request->sort, $allowedSorts) ? $request->sort : 'name';
+        
+        $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+
+        // 5. Pagination & mempertahankan Query String di URL
+        $patients = $query->orderBy($sort, $direction)
+                          ->paginate(10)
+                          ->withQueryString();
+
         return view('pasien.index', compact('patients'));
     }
 
     public function show($id)
-{
-    return 'Menampilkan pasien dengan ID: ' . $id;
-}
+    {
+        return 'Menampilkan pasien dengan ID: ' . $id;
+    }
 
     public function create()
     {

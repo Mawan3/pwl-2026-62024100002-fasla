@@ -21,4 +21,8 @@ class Doctor extends Model
     {
         return $this->belongsTo(Poli::class);
     }
+    public function registrations()
+    {
+        return $this->hasMany(Registration::class);
+    }
 }
