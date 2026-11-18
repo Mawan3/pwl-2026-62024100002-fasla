@@ -9,19 +9,42 @@ use Illuminate\Validation\Rule;
 
 class DoctorController extends Controller
 {
-    public function index()
-    {
-        // Menggunakan Eager Loading (with('poli')) untuk menghindari masalah N+1[cite: 39, 40]
-        $doctors = Doctor::with('poli')->get();
-        return view('dokter.index', compact('doctors'));
+    public function index(Request $request)
+{
+    // 1. Query bertahap dengan Eager Loading
+    $query = Doctor::with('poli');
+
+    // 2. Search berdasarkan nama atau kode dokter
+    if ($request->filled('search')) {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('name', 'like', "%{$search}%")
+              ->orWhere('doctor_code', 'like', "%{$search}%");
+        });
     }
 
-    public function create()
-    {
-        // Mengambil semua poli aktif untuk dropdown
-        $polis = Poli::where('is_active', true)->orderBy('name')->get();
-        return view('dokter.create', compact('polis'));
+    // 3. Filter berdasarkan Poli
+    if ($request->filled('poli_id')) {
+        $query->where('poli_id', $request->poli_id);
     }
+
+    // 4. Filter berdasarkan Status Aktif
+    if ($request->filled('is_active')) {
+        $query->where('is_active', $request->is_active);
+    }
+
+    // 5. Sorting berdasarkan Nama Dokter
+    $direction = $request->direction === 'desc' ? 'desc' : 'asc';
+    $query->orderBy('name', $direction);
+
+    // 6. Pagination 10 data dengan Query String
+    $doctors = $query->paginate(10)->withQueryString();
+
+    // Data Poli untuk dropdown filter
+    $polis = Poli::where('is_active', true)->orderBy('name')->get();
+
+    return view('dokter.index', compact('doctors', 'polis'));
+}
 
     public function store(Request $request)
     {

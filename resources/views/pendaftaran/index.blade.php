@@ -56,36 +56,31 @@
 
 <div class="card">
     <div class="card-body table-responsive p-0">
-        <table class="table table-hover text-nowrap">
+        <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th>No.</th>
+                    <th>No</th>
                     <th>Tanggal</th>
                     <th>Nama Pasien</th>
-                    <th>Dokter (Poli)</th>
+                    <th>Dokter</th>
                     <th>Keluhan</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                @forelse ($registrations as $reg)
-                <tr>
-                    <td>{{ $registrations->firstItem() + $loop->index }}</td>
-                    <td>{{ \Carbon\Carbon::parse($reg->registration_date)->format('d/m/Y') }}</td>
-                    <td>{{ $reg->patient?->name }}</td>
-                    <td>{{ $reg->doctor?->name }} ({{ $reg->doctor?->poli?->name }})</td>
-                    <td>{{ $reg->complaint ?? '-' }}</td>
-                    <td>
-                        @if($reg->status === 'waiting')
-                            <span class="badge bg-warning text-dark">Menunggu</span>
-                        @else
-                            <span class="badge bg-success">Selesai</span>
-                        @endif
-                    </td>
-                </tr>
+                @forelse ($registrations as $registration)
+                    <tr>
+                        <td>{{ $registrations->firstItem() + $loop->index }}</td>
+                        <td>{{ $registration->registration_date }}</td>
+                        <td>{{ $registration->patient?->name ?? '-' }}</td>
+                        <td>{{ $registration->doctor?->name ?? '-' }}</td>
+                        <td>{{ $registration->complaint }}</td>
+                        <td>{{ $registration->status }}</td>
+                    </tr>
                 @empty
-                <!-- Empty State -->
-                <tr><td colspan="6" class="text-center">Tidak ada data pendaftaran yang sesuai kriteria.</td></tr>
+                    <tr>
+                        <td colspan="6" class="text-center">Belum ada data pendaftaran.</td>
+                    </tr>
                 @endforelse
             </tbody>
         </table>

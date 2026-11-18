@@ -10,6 +10,7 @@ use App\Http\Controllers\RegistrationController;
 
 Route::resource('pendaftaran', RegistrationController::class);
 Route::resource('pasien', PatientController::class);
+Route::get('/', [DashboardController::class, 'index']);
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 Route::get('/pasien', [PatientController::class, 'index'])->name('pasien.index');
 Route::get('/pasien/{id}', [PatientController::class, 'show'])->name('pasien.show');

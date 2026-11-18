@@ -10,12 +10,12 @@
           <nav class="mt-2" aria-label="Main navigation">
             <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" id="navigation">
               <!-- Menu Dashboard -->
-              <li class="nav-item">
-                  <a href="{{ url('/') }}" class="nav-link">
-                      <i class="nav-icon fas fa-tachometer-alt"></i>
-                      <p>Dashboard</p>
-                  </a>
-              </li>
+                <li class="nav-item">
+                    <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
 
               <!-- Menu Data Poli -->
               <li class="nav-item">

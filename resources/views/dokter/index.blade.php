@@ -16,6 +16,44 @@
                 <h3 class="card-title">Daftar Dokter Klinik</h3>
             </div>
             
+            <!-- Form Pencarian dan Filter Dokter -->
+            <form method="GET" action="{{ route('dokter.index') }}" class="mb-3">
+                <div class="row g-2">
+                    <div class="col-md-3">
+                        <input type="text" name="search" class="form-control" value="{{ request('search') }}" placeholder="Cari Nama / Kode Dokter">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="poli_id" class="form-control">
+                            <option value="">Semua Poli</option>
+                            @foreach ($polis as $poli)
+                                <option value="{{ $poli->id }}" @selected(request('poli_id') == $poli->id)>{{ $poli->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="is_active" class="form-control">
+                            <option value="">Semua Status</option>
+                            <option value="1" @selected(request('is_active') === '1')>Aktif Melayani</option>
+                            <option value="0" @selected(request('is_active') === '0')>Sedang Cuti</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select name="direction" class="form-control">
+                            <option value="asc" @selected(request('direction') === 'asc')>Nama A-Z</option>
+                            <option value="desc" @selected(request('direction') === 'desc')>Nama Z-A</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary w-100">Terapkan</button>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <a href="{{ route('dokter.index') }}" class="btn btn-sm btn-secondary">Reset Filter</a>
+                </div>
+            </form>
+
+            <p class="text-muted">Menampilkan {{ $doctors->count() }} dari {{ $doctors->total() }} data dokter.</p>
+
             <!-- Isi Kartu (Tabel) -->
             <div class="card-body table-responsive p-0">
                 <!-- Tambahkan class Bootstrap pada tabel -->
@@ -35,7 +73,7 @@
                         @forelse ($doctors as $doctor)
                         <tr>
                             <!-- 1. Nomor Urut -->
-                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $doctors->firstItem() + $loop->index }}</td>
                             
                             <!-- 2. Kode Dokter -->
                             <td>{{ $doctor->doctor_code }}</td>
@@ -73,8 +111,11 @@
                             <tr><td colspan="7" class="text-center">Belum ada data Dokter.</td></tr>
                         @endforelse
                     </tbody>
-                    <table class="table table-hover text-nowrap"></table>
+                    
                 </table>
+                <div class="mt-3">
+                    {{ $doctors->links() }}
+                </div>
             </div>
             <!-- /.card-body -->
         </div>

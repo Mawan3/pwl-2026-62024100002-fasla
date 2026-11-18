@@ -37,7 +37,7 @@ class RegistrationController extends Controller
         }
 
         // 6. Sorting berdasarkan tanggal (Terbaru/Terlama)
-        $direction = $request->direction === 'asc' ? 'asc' : 'desc'; // Default Terbaru (desc)
+        $direction = $request->direction === 'asc' ? 'asc' : 'desc';
         $query->orderBy('registration_date', $direction);
 
         // 7 & 8. Pagination 10 data per halaman dan pertahankan query string
