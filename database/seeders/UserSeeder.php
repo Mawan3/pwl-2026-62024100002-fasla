@@ -15,14 +15,25 @@ class UserSeeder extends Seeder
             [
                 'name'     => 'Admin Klinik',
                 'password' => Hash::make('password123'),
+                'role'     => 'admin',
             ]
         );
 
         User::updateOrCreate(
-            ['email' => 'petugas@klinik.test'],
+            ['email' => 'pendaftaran@klinik.test'],
             [
                 'name'     => 'Petugas Pendaftaran',
                 'password' => Hash::make('password123'),
+                'role'     => 'registration',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'dokter@klinik.test'],
+            [
+                'name'     => 'Dokter Demo',
+                'password' => Hash::make('password123'),
+                'role'     => 'doctor',
             ]
         );
     }
