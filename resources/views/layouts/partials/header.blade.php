@@ -12,6 +12,27 @@
           <!--end::Sidebar Toggle-->
           <!--begin::User Menu-->
           <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ml-auto align-items-center">
+            @auth
+                <li class="nav-item me-3 mr-3">
+                    <span class="nav-link fw-semibold">
+                        Halo, <strong>{{ Auth::user()->name }}</strong>
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-danger">Logout</button>
+                    </form>
+                </li>
+            @endauth
+
+            @guest
+                <li class="nav-item">
+                    <a href="{{ route('login') }}" class="btn btn-sm btn-primary">Login</a>
+                </li>
+            @endguest
+        </ul>
             <li class="nav-item dropdown">
               <a href="#" class="nav-link dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
                 <img
